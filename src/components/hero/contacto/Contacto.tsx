@@ -1,8 +1,54 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 
 export default function Contacto() {
+  // Estados para capturar los datos del formulario
+  const [nombre, setNombre] = useState("");
+  const [email, setEmail] = useState("");
+  const [mensaje, setMensaje] = useState("");
+  
+  // Estados para la carga y feedback de la petición
+  const [cargando, setCargando] = useState(false);
+  const [estadoEnvio, setEstadoEnvio] = useState<"exito" | "error" | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setCargando(true);
+    setEstadoEnvio(null);
+
+    try {
+      // Mientras estás desarrollando apunta a tu localhost:8000. 
+      // Al subirlo a producción, solo cambias esta URL por la de tu dominio en Hostinger.
+      const response = await fetch("http://127.0.0.1:8000/api/contacto/enviar/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          nombre: nombre,
+          email: email,
+          mensaje: mensaje,
+        }),
+      });
+
+      if (response.ok) {
+        setEstadoEnvio("exito");
+        // Limpiamos los inputs si salió todo joya
+        setNombre("");
+        setEmail("");
+        setMensaje("");
+      } else {
+        setEstadoEnvio("error");
+      }
+    } catch (error) {
+      console.error("Error conectando con el backend:", error);
+      setEstadoEnvio("error");
+    } finally {
+      setCargando(false);
+    }
+  };
+
   return (
     <section id="contacto" className="py-24 px-6" style={{ background: "#fff0f5" }}>
       <div className="max-w-6xl mx-auto">
@@ -39,17 +85,18 @@ export default function Contacto() {
                 </div>
                 </a>
 
-                {/* Email */}
-                <div 
-                className="flex items-center gap-6 p-6 rounded-2xl bg-white border-1.5"
+            {/* Email */}
+              <a 
+                href="mailto:bianprincipi.dev@gmail.com" 
+                className="flex items-center gap-6 p-6 rounded-2xl bg-white transition-transform hover:scale-[1.02] cursor-pointer"
                 style={{ border: "1.5px solid #FFB7CE" }}
-                >
+              >
                 <span className="text-3xl">✉️</span>
                 <div>
-                    <h4 className="font-bold" style={{ color: "#D94C6F" }}>Email</h4>
-                    <p style={{ color: "#F06A8C" }}>bianprincipi.dev@gmail.com</p>
+                  <h4 className="font-bold" style={{ color: "#D94C6F" }}>Email</h4>
+                  <p style={{ color: "#F06A8C" }}>bianprincipi.dev@gmail.com</p>
                 </div>
-                </div>
+              </a>
             </div>
 
             {/* Ubicación */}
@@ -57,15 +104,18 @@ export default function Contacto() {
                 <h3 className="text-xl font-bold mb-2" style={{ color: "#D94C6F" }}>Ubicación</h3>
                 <p style={{ color: "#F06A8C" }}>Río Cuarto, Córdoba, Argentina</p>
             </div>
-            </div>
+          </div>
 
           {/* Columna Derecha: Formulario */}
           <div className="p-8 rounded-3xl bg-white border-1.5 shadow-sm" style={{ border: "1.5px solid #FFB7CE" }}>
-            <form className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <label className="block text-sm font-bold mb-2" style={{ color: "#D94C6F" }}>Nombre</label>
                 <input 
                   type="text" 
+                  required
+                  value={nombre}
+                  onChange={(e) => setNombre(e.target.value)}
                   placeholder="Tu nombre"
                   className="w-full p-4 rounded-xl outline-none border transition-colors focus:border-[#D94C6F]"
                   style={{ background: "#fff0f5", borderColor: "#FFB7CE", color: "#D94C6F" }}
@@ -76,6 +126,9 @@ export default function Contacto() {
                 <label className="block text-sm font-bold mb-2" style={{ color: "#D94C6F" }}>Email</label>
                 <input 
                   type="email" 
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="tu@email.com"
                   className="w-full p-4 rounded-xl outline-none border transition-colors focus:border-[#D94C6F]"
                   style={{ background: "#fff0f5", borderColor: "#FFB7CE", color: "#D94C6F" }}
@@ -86,6 +139,9 @@ export default function Contacto() {
                 <label className="block text-sm font-bold mb-2" style={{ color: "#D94C6F" }}>Mensaje</label>
                 <textarea 
                   rows={4}
+                  required
+                  value={mensaje}
+                  onChange={(e) => setMensaje(e.target.value)}
                   placeholder="Contame sobre tu proyecto"
                   className="w-full p-4 rounded-xl outline-none border transition-colors focus:border-[#D94C6F] resize-none"
                   style={{ background: "#fff0f5", borderColor: "#FFB7CE", color: "#D94C6F" }}
@@ -94,11 +150,24 @@ export default function Contacto() {
 
               <button 
                 type="submit"
-                className="w-full py-4 rounded-xl font-bold text-white transition-opacity hover:opacity-90"
+                disabled={cargando}
+                className="w-full py-4 rounded-xl font-bold text-white transition-all hover:opacity-90 disabled:opacity-60"
                 style={{ background: "#D94C6F" }}
               >
-                Enviar mensaje
+                {cargando ? "Enviando..." : "Enviar mensaje"}
               </button>
+
+              {/* Estados de feedback visual */}
+              {estadoEnvio === "exito" && (
+                <p className="text-center font-semibold text-green-600 bg-green-50 p-3 rounded-xl border border-green-200">
+                  ¡Mensaje enviado con éxito! 🎉
+                </p>
+              )}
+              {estadoEnvio === "error" && (
+                <p className="text-center font-semibold text-red-600 bg-red-50 p-3 rounded-xl border border-red-200">
+                  Hubo un problema al enviar el mensaje. Intentá de nuevo más tarde. ❌
+                </p>
+              )}
             </form>
           </div>
         </div>

@@ -51,6 +51,8 @@ MIDDLEWARE = [
 # Configuración de CORS para permitir a Next.js
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
+    "https://nexus-code.com.ar",
+    "http://nexus-code.com.ar",
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -106,3 +108,12 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Configuración del servidor de correo (SMTP)
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = env('EMAIL_HOST', default='smtp.gmail.com') # O el de Hostinger si creás uno corporativo
+EMAIL_PORT = env.int('EMAIL_PORT', default=587)
+EMAIL_USE_TLS = env.bool('EMAIL_USE_TLS', default=True)
+EMAIL_HOST_USER = env('EMAIL_HOST_USER') # Tu dirección de correo
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD') # Tu contraseña de aplicación o clave SMTP
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

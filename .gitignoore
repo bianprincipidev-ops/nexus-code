@@ -1,0 +1,6 @@
+# Django Backend Configurations
+nexus-backend/venv/
+nexus-backend/.env
+nexus-backend/db.sqlite3
+nexus-backend/__pycache__/
+nexus-backend/*.pyc
