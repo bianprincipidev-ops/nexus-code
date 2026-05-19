@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState } from 'react';
+import type { FormEvent } from 'react';
+import emailjs from '@emailjs/browser';
 
 export default function Contacto() {
   // Estados para capturar los datos del formulario
@@ -12,42 +14,40 @@ export default function Contacto() {
   const [cargando, setCargando] = useState(false);
   const [estadoEnvio, setEstadoEnvio] = useState<"exito" | "error" | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setCargando(true);
     setEstadoEnvio(null);
 
-    try {
-      // Mientras estás desarrollando apunta a tu localhost:8000. 
-      // Al subirlo a producción, solo cambias esta URL por la de tu dominio en Hostinger.
-      const response = await fetch("http://127.0.0.1:8000/api/contacto/enviar/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          nombre: nombre,
-          email: email,
-          mensaje: mensaje,
-        }),
-      });
+    // Mapeamos tus estados locales a las variables de la plantilla de EmailJS
+    const templateParams = {
+      name: nombre, // Va a {{name}}
+      email: email, // Va a {{email}}
+      message: mensaje, // Va a {{message}}
+    };
 
-      if (response.ok) {
+    emailjs.send(
+      'service_liffe5n', // Tu Service ID
+      'gwbbqtz', // Tu Template ID
+      templateParams,
+      'GrCKGWOalagGhMi92' // Tu Public Key
+    )
+      .then((response) => {
+        console.log('¡Éxito con EmailJS!', response.status, response.text);
         setEstadoEnvio("exito");
-        // Limpiamos los inputs si salió todo joya
+        // Limpiamos los inputs
         setNombre("");
         setEmail("");
         setMensaje("");
-      } else {
+      })
+      .catch((error) => {
+        console.error("Error enviando con EmailJS:", error);
         setEstadoEnvio("error");
-      }
-    } catch (error) {
-      console.error("Error conectando con el backend:", error);
-      setEstadoEnvio("error");
-    } finally {
-      setCargando(false);
-    }
-  };
+      })
+      .finally(() => {
+        setCargando(false);
+      });
+  }
 
   return (
     <section id="contacto" className="py-24 px-6" style={{ background: "#fff0f5" }}>
