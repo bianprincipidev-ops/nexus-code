@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from 'react';
-import type { FormEvent } from 'react';
 import emailjs from '@emailjs/browser';
 
 export default function Contacto() {
