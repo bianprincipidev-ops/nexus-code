@@ -27,7 +27,7 @@ export default function Contacto() {
 
     emailjs.send(
       'service_liffe5n', // Tu Service ID
-      'gwbbqtz', // Tu Template ID
+      'template_gwbbqtz', // Tu Template ID
       templateParams,
       'GrCKGWOalagGhMi92' // Tu Public Key
     )
