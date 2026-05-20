@@ -26,11 +26,12 @@ export default function Contacto() {
     };
 
     emailjs.send(
-      'service_liffe5n',     // Tu Service ID (Este estaba bien)
-      'template_l7mrguc',    // <--- TU TEMPLATE ID REAL (El de la captura)
-      templateParams,        // Las variables de tu formulario
-      'GrCKGWOalasdws 5gGhMi92'    // Tu Public Key (Este estaba bien)
+      process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || 'service_liffe5n',
+      process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || 'template_l7mrguc',
+      templateParams,
+      process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || 'GrCKGWOalagGhMi92'
     )
+    
       .then((response) => {
         console.log('¡Éxito con EmailJS!', response.status, response.text);
         setEstadoEnvio("exito");
