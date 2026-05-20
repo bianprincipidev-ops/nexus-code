@@ -27,7 +27,7 @@ export default function Contacto() {
 
     emailjs.send(
       'service_liffe5n',     // Tu Service ID (Este estaba bien)
-      'template_gwbbqtz',    // <--- TU TEMPLATE ID REAL (El de la captura)
+      'template_l7mrguc',    // <--- TU TEMPLATE ID REAL (El de la captura)
       templateParams,        // Las variables de tu formulario
       'GrCKGWOalasdws 5gGhMi92'    // Tu Public Key (Este estaba bien)
     )
