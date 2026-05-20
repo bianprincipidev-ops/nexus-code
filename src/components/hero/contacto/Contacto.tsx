@@ -29,7 +29,7 @@ export default function Contacto() {
       'service_liffe5n',     // Tu Service ID (Este estaba bien)
       'template_l7mrguc',    // <--- TU TEMPLATE ID REAL (El de la captura)
       templateParams,        // Las variables de tu formulario
-      'GrCKGWOalagGhMi92'    // Tu Public Key (Este estaba bien)
+      'GrCKGWOalasdws 5gGhMi92'    // Tu Public Key (Este estaba bien)
     )
       .then((response) => {
         console.log('¡Éxito con EmailJS!', response.status, response.text);
