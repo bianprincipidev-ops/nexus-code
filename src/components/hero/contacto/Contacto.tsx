@@ -26,10 +26,10 @@ export default function Contacto() {
     };
 
     emailjs.send(
-      'service_liffe5n', // Tu Service ID
-      'template_gwbbqtz', // Tu Template ID
-      templateParams,
-      'GrCKGWOalagGhMi92' // Tu Public Key
+      'service_liffe5n',     // Tu Service ID (Este estaba bien)
+      'template_l7mrguc',    // <--- TU TEMPLATE ID REAL (El de la captura)
+      templateParams,        // Las variables de tu formulario
+      'GrCKGWOalagGhMi92'    // Tu Public Key (Este estaba bien)
     )
       .then((response) => {
         console.log('¡Éxito con EmailJS!', response.status, response.text);
